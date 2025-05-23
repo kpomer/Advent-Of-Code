@@ -16,7 +16,25 @@ Current_Dir = os.path.dirname(__file__) #directory of current folder
 
 
 def main():
-    fileSA = shr.fileAsStringArray(Current_Dir, "e")
-    # print(fileSA)
+    fileSA = shr.fileAsStringArray(Current_Dir)[0]
+
+    counter = 0
+    floor = 0
+    pos = 1
+    for i in fileSA:
+        if(i == '('):
+           floor += 1
+        elif(i == ')'):
+           floor -= 1
+        counter += 1
+        if(pos == 1 and floor < 0):
+            pos = counter
+
+
+    print(f"Part 1: {floor}")
+    print(f"Part 2: {pos}")
+
+
+
 
 main()

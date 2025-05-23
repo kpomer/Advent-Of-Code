@@ -5,18 +5,21 @@ PuzzleInputFileName = "PuzzleInput.txt"
 PuzzleInputExampleFileName = "PuzzleInput_example.txt"
 
 
-'''Return file as String Array'''
-def fileAsStringArray(rootDirectory, file = "i"):
+'''Get File from Directory'''
+def getFile(rootDirectory, file = "i"):
     #Determine whether to use example or input file
     if file.lower() == "i":
-        file = PuzzleInputFileName
+        fileName = PuzzleInputFileName
     elif file.lower() == "e":
-        file = PuzzleInputExampleFileName
+        fileName = PuzzleInputExampleFileName
     else:
         print(file)
         raise Exception(f"Invalid Input Value for file: '{file}'.  Allowed values are 'i' or 'e'")
+    return open(os.path.join(rootDirectory, fileName))
 
-    f = open(os.path.join(rootDirectory, file))
+'''Return file as String Array'''
+def fileAsStringArray(rootDirectory, file = "i"):
+    f = getFile(rootDirectory, file)
     return f.readlines()
 
 
