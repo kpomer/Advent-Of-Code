@@ -16,7 +16,29 @@ Current_Dir = os.path.dirname(__file__) #directory of current folder
 
 
 def main():
-    fileSA = shr.fileAsStringArray(Current_Dir, "e")
+    fileSA = shr.fileAsStringArray(Current_Dir)
     # print(fileSA)
+
+    fullSurfaceArea = 0
+    fullRibbonLength = 0
+    for d in fileSA:
+        l = int(d.split("x")[0])
+        w = int(d.split("x")[1])
+        h = int(d.split("x")[2])
+
+        #Surface Area
+        surfaceArea = 2*l*w + 2*w*h + 2*h*l
+        extraSurfaceArea = min(l*w,l*h,w*h)
+        presentTotalSurface = surfaceArea + extraSurfaceArea
+        fullSurfaceArea += presentTotalSurface
+
+        #Ribbon
+        ribbonLength = 2*min(l+w, w+h, h+l)
+        extraRibbon = l*w*h
+        presentTotalRibbon = ribbonLength + extraRibbon
+        fullRibbonLength += presentTotalRibbon
+
+    print(f"Part 1: {fullSurfaceArea}")
+    print(f"Part 2: {fullRibbonLength}")
 
 main()

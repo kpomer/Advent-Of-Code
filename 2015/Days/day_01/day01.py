@@ -30,11 +30,7 @@ def main():
         if(pos == 1 and floor < 0):
             pos = counter
 
-
     print(f"Part 1: {floor}")
     print(f"Part 2: {pos}")
-
-
-
 
 main()
