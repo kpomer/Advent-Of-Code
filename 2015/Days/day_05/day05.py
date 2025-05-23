@@ -19,4 +19,33 @@ def main():
     fileSA = shr.fileAsStringArray(Current_Dir, "e")
     # print(fileSA)
 
+    niceWords = {}
+
+    #Nice Strings
+    vowels = {"a","e","i","o","u"}
+    badStrings = {"ab","cd","pq","xy"}
+
+    #loop through strings in input
+    for s in fileSA:
+        vowelCount = 0
+        doubleLetters = False
+
+        #loop through letters in string
+        l = 0
+        while(l < len(s)):
+            if(l != len(s) - 1):
+                if (str(s[l] + s[l+1]) in badStrings):
+                    break
+
+            if(l in vowels):
+                vowelCount += 1
+
+            l += 1
+            if(l == len(s) and vowelCount >= 3 and doubleLetters == True):
+                niceWords.add(s)
+            
+            
+
+
+
 main()
