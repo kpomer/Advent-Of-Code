@@ -23,4 +23,25 @@ def fileAsStringArray(rootDirectory, file = "i"):
     return f.readlines()
 
 
+'''Coordinate Movement'''
+def moveCoordinate(startingCoordinate, moveDir):
+    #Storing coordinate as Tuple because it will be immutable
+
+    if(moveDir == "^"):
+        #move up
+        newDir = (startingCoordinate[0], startingCoordinate[1]-1)
+    elif(moveDir == ">"):
+        #move right
+        newDir = (startingCoordinate[0]+1, startingCoordinate[1])
+    elif(moveDir == "v"):
+        #move right
+        newDir = (startingCoordinate[0], startingCoordinate[1]+1)
+    elif(moveDir == "<"):
+        #move right
+        newDir = (startingCoordinate[0]-1, startingCoordinate[1])
+    else:
+        raise Exception(f"Invalid Move Direction: '{moveDir}'.  Allowed values are '^', '>', 'v', '<'")
+    return newDir
+
+
 

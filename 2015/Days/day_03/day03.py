@@ -16,7 +16,35 @@ Current_Dir = os.path.dirname(__file__) #directory of current folder
 
 
 def main():
-    fileSA = shr.fileAsStringArray(Current_Dir, "e")
+    fileSA = shr.fileAsStringArray(Current_Dir)[0]
     # print(fileSA)
+
+    ## PART 1
+    location = (0,0)
+    housesVisited = {location}
+
+    for d in fileSA:
+        location = shr.moveCoordinate(location, d)
+        housesVisited.add(location)
+
+    print(f"Part 1: {len(housesVisited)}")
+
+
+    ## PART 2
+    locationSanta = (0,0)
+    locationRobo = (0,0)
+    housesVisited = {locationSanta}
+
+    for c in range(len(fileSA)):
+        if (c%2 == 0):
+            locationSanta = shr.moveCoordinate(locationSanta, fileSA[c])
+            housesVisited.add(locationSanta)
+        elif (c%2 == 1):
+            locationRobo = shr.moveCoordinate(locationRobo, fileSA[c])
+            housesVisited.add(locationRobo)
+
+    print(f"Part 2: {len(housesVisited)}")
+
+
 
 main()
