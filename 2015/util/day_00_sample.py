@@ -1,3 +1,6 @@
+### SAMPLE CLASS - this page represents an example of the starting point for a new day_## class
+
+
 # main.py
 import sys
 import os
