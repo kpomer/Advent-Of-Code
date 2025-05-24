@@ -84,18 +84,4 @@ def main():
 
     print(f"Part 2: {len(niceWords)}")
 
-        
-
-                    
-
-
-
-
-
-
-            
-            
-
-
-
 main()
