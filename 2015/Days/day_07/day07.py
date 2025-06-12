@@ -20,9 +20,7 @@ Operators = {"NOT", "AND", "OR", "LSHIFT", "RSHIFT"}
 
 
 def main():
-    fileSA = shr.fileAsStringArray(Current_Dir, "e")
-    # print(fileSA)
-
+    fileSA = shr.fileAsStringArray(Current_Dir)
 
     for i in fileSA:
         InitializeInstructionList(i)
@@ -36,7 +34,8 @@ def main():
 
 
 
-    print(len(InstructionList))
+
+    print(f"Part 1: {int(WireValues['a'], 2)}")
 
     # a
     # a AND b
@@ -85,22 +84,22 @@ def PerformInstruction(inst):
     
     if(inst[0] == None):
         # a -> c
-        WireValues[inst[3]] = NumOrValue(inst[1])
+        WireValues[inst[3]] = ToBinary(NumOrValue(inst[1]))
     elif(inst[0] == "AND"):
         # a AND b -> c
-        WireValues[inst[3]] = NumOrValue(inst[1]) & NumOrValue(inst[2])
+        WireValues[inst[3]] = ToBinary(NumOrValue(inst[1]) & NumOrValue(inst[2]))
     elif(inst[0] == "LSHIFT"):
         # a LSHIFT b -> c
-        WireValues[inst[3]] = NumOrValue(inst[1]) << NumOrValue(inst[2])
+        WireValues[inst[3]] = ToBinary(NumOrValue(inst[1]) << NumOrValue(inst[2]))
     elif(inst[0] == "RSHIFT"):
         # a RSHIFT b -> c
-        WireValues[inst[3]] = NumOrValue(inst[1]) >> NumOrValue(inst[2])
+        WireValues[inst[3]] = ToBinary(NumOrValue(inst[1]) >> NumOrValue(inst[2]))
     elif(inst[0] == "NOT"):
         # NOT b -> c
-        WireValues[inst[3]] = ~NumOrValue(inst[1])
+        WireValues[inst[3]] = NOTOp(ToBinary(NumOrValue(inst[1])))
     elif(inst[0] == "OR"):
         # a OR b -> c
-        WireValues[inst[3]] = NumOrValue(inst[1]) | NumOrValue(inst[2])
+        WireValues[inst[3]] = ToBinary(NumOrValue(inst[1]) | NumOrValue(inst[2]))
 
 
 def NumOrValue(x):
@@ -108,8 +107,32 @@ def NumOrValue(x):
     if x.isnumeric():
         return int(x)
     else:
-        return WireValues[x]
+        return int(WireValues[x], 2)
     
+def ToBinary(i):
+    b = str(bin(i))
+
+    #Set 16 bits
+    if(len(b) > 18):
+        b = "0b" + b[-16:]
+    elif(len(b) < 18):
+        b = "0b" + ("0000000000000000" + b[2:])[-16:]
+
+    return b
+
+def NOTOp(b):
+    b_lst = list(b)
+    b_NOT = ""
+    for l in range(len(b_lst)):
+        if l < 2:
+            b_NOT = b_NOT + b_lst[l]
+        elif l >= 2:
+            if b_lst[l] == '0':
+                b_NOT = b_NOT + '1'
+            elif b_lst[l] == '1':
+                b_NOT = b_NOT + '0'
+
+    return b_NOT
 
 
 
