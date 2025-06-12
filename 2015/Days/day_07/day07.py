@@ -22,20 +22,35 @@ Operators = {"NOT", "AND", "OR", "LSHIFT", "RSHIFT"}
 def main():
     fileSA = shr.fileAsStringArray(Current_Dir)
 
-    for i in fileSA:
-        InitializeInstructionList(i)
+    part1Result = 0
 
-    while(len(InstructionList) > 0):
-        for inst in InstructionList:
-            if(inst[1].isnumeric() or inst[1] in WireValues):
-                if(inst[2] == None or inst[2].isnumeric() or inst[2] in WireValues):
-                    PerformInstruction(inst)
-                    InstructionList.remove(inst)
+    ## PART 1 and PART 2
+    for p in [1,2]:
 
+        # Clear values
+        WireValues.clear()
+        InstructionList.clear()
 
+        for i in fileSA:
 
+            # Part 2
+            if p == 2 and i[-6:] == " -> b\n":
+                i = f"{part1Result} -> b\n"  
 
-    print(f"Part 1: {int(WireValues['a'], 2)}")
+            InitializeInstructionList(i)
+
+        while(len(InstructionList) > 0):
+            for inst in InstructionList:
+                if(inst[1].isnumeric() or inst[1] in WireValues):
+                    if(inst[2] == None or inst[2].isnumeric() or inst[2] in WireValues):
+                        PerformInstruction(inst)
+                        InstructionList.remove(inst)
+
+        if p == 1:
+            part1Result = int(WireValues['a'], 2) 
+            print(f"Part 1: {part1Result}")
+        elif p == 2:
+            print(f"Part 2: {int(WireValues['a'], 2)}")
 
     # a
     # a AND b
