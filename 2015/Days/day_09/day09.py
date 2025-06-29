@@ -17,6 +17,11 @@ Current_Dir = os.path.dirname(__file__) #directory of current folder
 
 def main():
     fileSA = shr.fileAsStringArray(Current_Dir, "e")
-    # print(fileSA)
+    
+    for d in fileSA:
+        d = str.replace(d, "\n", "")
+        print(d)
+
+        #Pathfinding needed - maybe Dijkstra's or A*, but must check ALL nodes (not only shortest from A->Z)
 
 main()
