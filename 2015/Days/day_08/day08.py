@@ -1,6 +1,7 @@
 # main.py
 import sys
 import os
+import re
 
 # region Access Shared Functions
 # Get the absolute path to the directory containing the current script (main.py)
@@ -16,7 +17,18 @@ Current_Dir = os.path.dirname(__file__) #directory of current folder
 
 
 def main():
-    fileSA = shr.fileAsStringArray(Current_Dir, "e")
-    # print(fileSA)
+    fileSA = shr.fileAsStringArray(Current_Dir)
+
+
+    literalLength = 0
+    evalLength = 0
+
+    for i in fileSA:
+        i = str.replace(i, "\n", "")
+
+        literalLength = literalLength + len(i)
+        evalLength = evalLength + len(eval(i))
+
+    print(f"Part 1: {literalLength - evalLength}")
 
 main()
