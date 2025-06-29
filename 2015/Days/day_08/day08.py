@@ -22,13 +22,18 @@ def main():
 
     literalLength = 0
     evalLength = 0
+    encodedLength = 0
 
     for i in fileSA:
         i = str.replace(i, "\n", "")
+        encodedStr = "\"" + str.replace(str.replace(i, "\\", "\\\\"), "\"", "\\\"") + "\"" #used in Part2
 
         literalLength = literalLength + len(i)
         evalLength = evalLength + len(eval(i))
+        encodedLength = encodedLength + len(encodedStr)
+
 
     print(f"Part 1: {literalLength - evalLength}")
+    print(f"Part 2: {encodedLength - literalLength}")
 
 main()
