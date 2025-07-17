@@ -14,14 +14,28 @@ import util.sharedFunctions as shr #import shared functions from util folder
 # Global Variables
 Current_Dir = os.path.dirname(__file__) #directory of current folder
 
+class Route:
+  def __init__(self, pointA, pointB, distance):
+    self.p1 = pointA
+    self.p2 = pointB
+    self.dist = distance
 
 def main():
     fileSA = shr.fileAsStringArray(Current_Dir, "e")
     
-    for d in fileSA:
-        d = str.replace(d, "\n", "")
-        print(d)
+    routes = []
+    nodes = set()
 
+    for r in fileSA:
+        r = str.replace(r, "\n", "")
+        
+        r_Split = r.split(" ")
+        routes.append(Route(r_Split[0], r_Split[2], r_Split[4]))
+        nodes.add(r_Split[0])
+        nodes.add(r_Split[2])
+
+    
         #Pathfinding needed - maybe Dijkstra's or A*, but must check ALL nodes (not only shortest from A->Z)
+        # Traveling Salesman Problem
 
 main()
