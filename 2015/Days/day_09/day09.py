@@ -25,17 +25,22 @@ def main():
     
     routes = []
     nodes = set()
+    nodeDict = dict()
 
     for r in fileSA:
         r = str.replace(r, "\n", "")
         
         r_Split = r.split(" ")
         routes.append(Route(r_Split[0], r_Split[2], r_Split[4]))
-        nodes.add(r_Split[0])
-        nodes.add(r_Split[2])
+        for i in {r_Split[0], r_Split[2]}:
+           if(i not in nodes):
+              nodeDict[len(nodes)] = i
+              nodes.add(i)
 
-    
-        #Pathfinding needed - maybe Dijkstra's or A*, but must check ALL nodes (not only shortest from A->Z)
-        # Traveling Salesman Problem
+
+
+        # Pathfinding needed - maybe Dijkstra's or A*, but must check ALL nodes (not only shortest from A->Z)
+        # Traveling Salesman Problem - Held-Karp algorithm 
+
 
 main()
