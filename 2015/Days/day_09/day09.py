@@ -25,9 +25,13 @@ def main():
     fileSA = shr.fileAsStringArray(Current_Dir)
     initializeData(fileSA)
 
-    N = len(Nodes)
-    minCost_ForAll = float('inf')
+    getPath("Part 1", float('inf')) # Minimum Path Cost
+    getPath("Part 2", -1) # Maximum Path Cost
 
+
+def getPath(part, limit):
+    partLimit = limit
+    N = len(Nodes)
     for startNode in range(N):
         DP = dict()
 
@@ -58,25 +62,33 @@ def main():
                         prev_mask = mask ^ (1 << j)
                         # print(str(prev_mask) + ": " + formatBin(prev_mask, N))
 
-                        minCostTo_j = float('inf') #start at infinite
+                        limit_cost_To_j = partLimit
                         for i in range(N):
                             if i != j and i != startNode and ((prev_mask >> i) & 1):
                                 if prev_mask in DP and i in DP[prev_mask]:
                                     cost_i_to_j = DP[prev_mask][i] + getCost(i,j)
-                                    minCostTo_j = min(minCostTo_j, cost_i_to_j)
+                                    if(part == "Part 1"):    
+                                        limit_cost_To_j = min(limit_cost_To_j, cost_i_to_j)
+                                    elif(part == "Part 2"):    
+                                        limit_cost_To_j = max(limit_cost_To_j, cost_i_to_j)
+                                    else:
+                                        Exception("Invalid Part: " + part)
                                 else:
                                     Exception("Error!")
                         if mask not in DP:
                             DP[mask] = {}
-                        DP[mask][j] = minCostTo_j
+                        DP[mask][j] = limit_cost_To_j
 
         final_mask = (1 << N) - 1
         for p in DP[final_mask]:
-            minCost_ForAll = min(minCost_ForAll, DP[final_mask][p])
+            if(part == "Part 1"):    
+                limit = min(limit, DP[final_mask][p])
+            elif(part == "Part 2"):    
+                limit = max(limit, DP[final_mask][p])
+            else:
+                Exception("Invalid Part: " + part)
 
-    print("Part 1: " + str(minCost_ForAll))
-    
-
+    print("Part 1: " + str(limit))   
 
 
 
