@@ -16,7 +16,24 @@ Current_Dir = os.path.dirname(__file__) #directory of current folder
 
 
 def main():
-    fileSA = shr.fileAsStringArray(Current_Dir, "e")
-    # print(fileSA)
+    inputValue = shr.fileAsStringArray(Current_Dir)[0]
+    processedValue = int(inputValue)
+    for i in range(40): # change to 40
+        processedValue = lookAndSayConvert(str(processedValue))
+
+    print(f"Part 1: {len(str(processedValue))}")
+
+
+def lookAndSayConvert(valueToProcess):
+    newValue = ""
+    l = 0
+    while l < len(valueToProcess):
+        repeats = 1
+        while (l+1 < len(valueToProcess) and valueToProcess[l] == valueToProcess[l+1]):
+            repeats+=1
+            l+=1
+        newValue += str(repeats) + valueToProcess[l]
+        l+=1
+    return int(newValue)
 
 main()
