@@ -1,5 +1,5 @@
 #!/bin/bash
-# A simple script to print "Hello World"
+# A simple script to create a new Year folder for AOC
 
 # --- Argument Validations ---
 if [ "$#" -ne 1 ] || ! [[ "$1" =~ ^[0-9]{4}$ ]]; then
