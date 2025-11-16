@@ -37,4 +37,3 @@ fi
 
 # --- Success Output ---
 echo "Successfully created new project folder: $NEW_FOLDER"
-echo "Hello World $NEW_FOLDER"
