@@ -1,6 +1,7 @@
 # main.py
 import sys
 import os
+import re
 
 # region Access Shared Functions
 # Get the absolute path to the directory containing the current script (main.py)
@@ -16,7 +17,15 @@ Current_Dir = os.path.dirname(__file__) #directory of current folder
 
 
 def main():
-    fileSA = shr.fileAsStringArray(Current_Dir, "e")
-    # print(fileSA)
+    fileInput = shr.fileAsStringArray(Current_Dir)[0].strip("\n")
+    
+    re_Pattern = "-?[0-9]+"
+    re_Matches = re.findall(re_Pattern, fileInput)
 
+    sum = 0
+    for r in re_Matches:
+        sum += int(r)
+
+    print("Part 1: " + str(sum))
+    
 main()
