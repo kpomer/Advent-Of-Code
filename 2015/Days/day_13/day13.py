@@ -17,6 +17,6 @@ Current_Dir = os.path.dirname(__file__) #directory of current folder
 
 def main():
     fileSA = shr.fileAsStringArray(Current_Dir, "e")
-    # print(fileSA)
+    print(fileSA)
 
 main()
