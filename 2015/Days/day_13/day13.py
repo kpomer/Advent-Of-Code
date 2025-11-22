@@ -17,6 +17,29 @@ Current_Dir = os.path.dirname(__file__) #directory of current folder
 
 def main():
     fileSA = shr.fileAsStringArray(Current_Dir, "e")
-    print(fileSA)
+    
+    arrangementCosts = getArrangementCosts(fileSA)
+
+
+
+def getArrangementCosts(inputList):
+
+    dict = {}
+    for i in inputList:
+        arr_values = str.split(i, " ")
+        name1 = arr_values[0]
+        name2 = str.replace(str.replace(arr_values[10], "\n", ""), ".", "")
+        num = int(arr_values[3])
+        if arr_values[2] == "lose":
+            num = num * -1
+
+        namePair = tuple(sorted((name1, name2)))
+
+        if namePair in dict:
+            dict[namePair] = dict[namePair] + num
+        else:
+            dict[namePair] = num
+
+    return dict
 
 main()
