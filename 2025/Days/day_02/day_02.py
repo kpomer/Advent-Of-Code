@@ -16,8 +16,33 @@ Current_Dir = os.path.dirname(__file__) #directory of current folder
 
 
 def main():
-    fileSA = shr.fileAsStringArray(Current_Dir, "e")
-    # print(fileSA)
-    print("Hello WOrld!")
+    fileSA = shr.fileAsStringArray(Current_Dir)[0].split(",")
+
+    part1_sum = 0
+    for r in fileSA:
+        range = r.split("-")
+        start = int(range[0])
+        end = (range[1])
+
+        c = int(start)
+        while c <= int(end):
+            idLength = len(str(c))
+            if idLength % 2 == 0:
+                splitLength = int(idLength/2)
+                c_Str = str(c)
+                if c_Str[:splitLength] == c_Str[splitLength:]:
+                    part1_sum += c
+            
+            c+= 1
+
+    print(f"Part 1: {part1_sum}")
+
+        # idLength = len(start)
+        # while idLength <= len(end):
+        #     if idLength % 2 == 0:
+        #         # Even number of digits
+        #         id_1 = start
+            
+        #     idLength += 1
 
 main()
