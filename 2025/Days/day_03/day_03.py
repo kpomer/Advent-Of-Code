@@ -14,31 +14,39 @@ import util.sharedFunctions as shr #import shared functions from util folder
 # Global Variables
 Current_Dir = os.path.dirname(__file__) #directory of current folder
 
-
 def main():
     fileSA = shr.fileAsStringArray(Current_Dir)
 
-    sum = 0
+    part1 = 0
+    part2 = 0
     for bank in fileSA:
         bank = bank.replace("\n","")
-    
-        # Part 1
-        joltage = [-1,-1]
-        index = 0
-        for battery in list(bank):
-            if int(battery) > joltage[0] and index != len(bank) - 1:
-                joltage[0] = int(battery)
-                joltage[1] = -1
-            elif joltage[0] != -1 and int(battery) > joltage[1]:
-                joltage[1] = int(battery)
-            
-            index+=1
 
-        if joltage[0] == -1 or joltage[1] == -1:
-            raise Exception("Invalid")
+        part1 += getJoltage([-1]*2, list(bank)) # 2 batteries
+        part2 += getJoltage([-1]*12, list(bank)) # 12 batteries
+
+    print(f"Part 1: {part1}")
+    print(f"Part 2: {part2}")
+
+
+def getJoltage(joltageArray, bank):
+
+    for batteryIndex in range(len(joltageArray)):
+        start = joltageArray[batteryIndex-1] + 1
+        end = len(bank) - len(joltageArray) + batteryIndex
+
+        maxIndex = start
+        for i in range(start+1, end+1):
+            if int(bank[i]) > int(bank[maxIndex]):
+                maxIndex = i
         
-        sum += int("".join(map(str, joltage)))
-    
-    print(f"Part 1: {sum}")
+        joltageArray[batteryIndex] = maxIndex
+
+    joltageString = ""
+    for j in joltageArray:
+        joltageString += bank[j]
+
+    return int(joltageString)
+
 
 main()
