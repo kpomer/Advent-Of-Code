@@ -18,6 +18,14 @@ Current_Dir = os.path.dirname(__file__) #directory of current folder
 def main():
     fileGrid, width, height = shr.fileAsGrid(Current_Dir)
     
+    part1_count = Part1(fileGrid, width, height)
+    part2_count = Part2(fileGrid, width, height)
+
+    print(f"Part 1: {part1_count}")
+    print(f"Part 2: {part2_count}")
+
+
+def Part1(fileGrid, width, height):
     part1_count = 0
     for coordinate in fileGrid:
         if fileGrid[coordinate] == "@":
@@ -29,7 +37,30 @@ def main():
 
             if adj_rolls < 4:
                 part1_count += 1
+    
+    return part1_count
 
-    print(f"Part 1: {part1_count}")
+def Part2(fileGrid, width, height):
+
+    rollsRemoved = True # used as Do/While
+    totalRollsRemoved = 0
+
+    while rollsRemoved:
+        rollsRemoved = False
+        for coordinate in fileGrid:
+            if fileGrid[coordinate] == "@":
+                adj_rolls = 0
+                for dir in ["^", ">", "v", "<", "^>", "^<", "v>", "v<"]:
+                    newCoordinate = shr.moveCoordinate(coordinate, dir)
+                    if shr.validCoordinate(newCoordinate, width, height) and fileGrid[newCoordinate] == "@":
+                        adj_rolls += 1
+
+                if adj_rolls < 4:
+                    fileGrid[coordinate] = "." # Remove '@' from location
+                    rollsRemoved = True
+                    totalRollsRemoved += 1
+
+    return totalRollsRemoved
+    
 
 main()

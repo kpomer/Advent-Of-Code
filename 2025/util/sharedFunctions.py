@@ -85,4 +85,12 @@ def validCoordinate(coordinate, gridWidth, gridHeight):
     return True
 
 
+'''Print Functions'''
+def printGrid(grid, gridWidth, gridHeight):
+    for y in range(gridHeight):
+        rowToPrint = ""
+        for x in range(gridWidth):
+            rowToPrint += grid[x, y]
+        print(rowToPrint)
+
 
