@@ -18,16 +18,14 @@ FreshRanges = list()
 AvailableIDs = list()
 
 def main():
-    fileSA = shr.fileAsStringArray(Current_Dir, "e")
+    fileSA = shr.fileAsStringArray(Current_Dir)
     row = 0
     
     # Fresh Ranges
     while fileSA[row] != "\n":
         line = fileSA[row].replace("\n","")
         lineSplit = line.split("-")
-        processRange([int(lineSplit[0]),int(lineSplit[1])])
-        formatRanges()
-        # TODO Cleanup and Sort FreshRanges
+        FreshRanges.append([int(lineSplit[0]),int(lineSplit[1])])
         row += 1
 
     # Available IDs
@@ -35,76 +33,56 @@ def main():
         line = fileSA[r].replace("\n","")
         AvailableIDs.append(int(line))
 
+    # Cleanup Range Data
+    simplifyRanges()
 
-def processRange(rangeValues):
-    
-    if rangeValues in FreshRanges:
-        # Duplicate Value
-        return
-    
-    if rangeValues[0] > rangeValues[1]:
-        raise Exception(f"Invalid Range Order [{rangeValues[0]},{rangeValues[1]}]")
+    idCount = 0
+    for id in AvailableIDs:
+        if idIsFresh(id):
+            idCount += 1
 
-    for r in FreshRanges:
-        if rangeValues[0] < r[0] and rangeValues[1] >= r[0] and rangeValues[1] <= r[1]:
-            # extend start
-            r[0] = rangeValues[0]
-            return
-        elif rangeValues[0] >= r[0] and rangeValues[1] <= r[1]:
-            # within range
-            return
-        elif rangeValues[0] >= r[0] and rangeValues[0] <= r[1] and rangeValues[1] > r[1]:
-            # extend start
-            r[1] = rangeValues[1]
-            return
-        
-    # no matches - new range
-    FreshRanges.append(rangeValues)
+    print(f"Part 1: {idCount}")
 
-def formatRanges():
+
+
+def simplifyRanges():
+    # Sort
     FreshRanges.sort(key=sortRanges)
+
+    r = 0
+    invalid = [-1,-1]
+    while r < len(FreshRanges) - 1:
+
+        if FreshRanges[r] == invalid:
+            x = 0 # do nothing and continue
+        elif FreshRanges[r] == FreshRanges[r+1]:
+            FreshRanges[r+1] = invalid # duplicate - remove
+        elif FreshRanges[r+1][0] <= FreshRanges[r][1] and FreshRanges[r+1][1] <= FreshRanges[r][1]:
+            FreshRanges[r+1] = invalid # fully contained - remove
+        elif FreshRanges[r+1][0] <= FreshRanges[r][1] and FreshRanges[r+1][1] > FreshRanges[r][1]:
+            FreshRanges[r][1] = FreshRanges[r+1][1] # extends current range
+            FreshRanges[r+1] = invalid # accounted for - remove
+
+        r += 1
+
+    # Remove Invalid Ranges
+    for checkRange in FreshRanges:
+        if checkRange == invalid:
+            FreshRanges.remove(checkRange)
+
+
+def idIsFresh(id):
+    for range in FreshRanges:
+        if id < range[0]:
+            return False
+        elif id >= range[0] and id <= range[1]:
+            return True
+    
+    return False
 
 
 def sortRanges(val):
     return val[0]
         
-        
-
-#     # a = [4, 7, 9, 7, 2, 7]
-
-#     # # Find all indices of the value 7
-#     # indices = [i for i, x in enumerate(a) if x == 7]
-#     # print("Indices", indices)
-
-#     # Process File
-#     lineBreak = False
-#     for line in fileSA:
-#         if line == "\n": # line break
-#             lineBreak = True
-#             continue
-
-#         line = line.replace("\n","")
-#         if lineBreak == False:
-#             rangeValues = line.split("-")
-#             # for r in range(int(rangeValues[0]), int(rangeValues[1])+1):
-#             #     freshIDs.add(r)
-            
-#             # if len(filter(extendStart, freshRanges)) > 0:
-#             #     i = freshRanges.index(filter(extendStart, freshRanges)[0])
-#             #     newRange = [0,0]
-#             #     newRange[0] = rangeValues
-
-
-#         elif lineBreak == True:
-#             availableIDs.append(int(line))
-
-# def extendStart(list):
-#     print('x')
-
-#     # freshCount = 0
-#     # for i in availableIDs:
-#     #     if i in freshIDs:
-#     #         freshCount += 1
-#     # print(freshCount)
 
 main()
