@@ -43,6 +43,11 @@ def main():
 
     print(f"Part 1: {idCount}")
 
+    freshCount = 0
+    for r in FreshRanges:
+        freshCount += (r[1]-r[0]+1)
+
+    print(f"Part 2: {freshCount}")
 
 
 def simplifyRanges():
@@ -54,21 +59,31 @@ def simplifyRanges():
     while r < len(FreshRanges) - 1:
 
         if FreshRanges[r] == invalid:
-            x = 0 # do nothing and continue
-        elif FreshRanges[r] == FreshRanges[r+1]:
-            FreshRanges[r+1] = invalid # duplicate - remove
-        elif FreshRanges[r+1][0] <= FreshRanges[r][1] and FreshRanges[r+1][1] <= FreshRanges[r][1]:
-            FreshRanges[r+1] = invalid # fully contained - remove
-        elif FreshRanges[r+1][0] <= FreshRanges[r][1] and FreshRanges[r+1][1] > FreshRanges[r][1]:
-            FreshRanges[r][1] = FreshRanges[r+1][1] # extends current range
-            FreshRanges[r+1] = invalid # accounted for - remove
+            r += 1
+            continue
+
+        r_next = r+1
+        while r_next <= len(FreshRanges) - 1 and FreshRanges[r][1] >= FreshRanges[r_next][0]:
+            if FreshRanges[r] == FreshRanges[r_next]:
+                    FreshRanges[r_next] = invalid # duplicate - remove
+            elif FreshRanges[r_next][0] <= FreshRanges[r][1] and FreshRanges[r_next][1] <= FreshRanges[r][1]:
+                FreshRanges[r_next] = invalid # fully contained - remove
+            elif FreshRanges[r_next][0] <= FreshRanges[r][1] and FreshRanges[r_next][1] > FreshRanges[r][1]:
+                FreshRanges[r][1] = FreshRanges[r_next][1] # extends current range
+                FreshRanges[r_next] = invalid # accounted for - remove
+            else:
+                raise Exception(f"Invalid Value! {FreshRanges[r]} and {FreshRanges[r_next]}")
+            
+            r_next += 1
 
         r += 1
 
     # Remove Invalid Ranges
-    for checkRange in FreshRanges:
-        if checkRange == invalid:
-            FreshRanges.remove(checkRange)
+    checkIndex = len(FreshRanges) - 1
+    while checkIndex >= 0:
+        if FreshRanges[checkIndex] == invalid:
+            FreshRanges.pop(checkIndex)
+        checkIndex -= 1
 
 
 def idIsFresh(id):
