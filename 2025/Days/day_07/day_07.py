@@ -18,7 +18,8 @@ FileGrid = {}
 MaxWidth = 0
 MaxHeight = 0
 UsedSplitterSet = set()
-findSplits_cache = set()
+FindSplits_cache = set()
+FindPaths_cache = {}
 
 def main():
     global FileGrid, MaxWidth, MaxHeight # Modifying Value of Global Variables
@@ -31,15 +32,19 @@ def main():
         elif FileGrid[coordinate] == "S":
             startCoordinate = coordinate
 
-    # Part 1 - recurisve loop from incoming beam source 'S'
+    # Part 1 - recursive loop from incoming beam source 'S'
     findSplits(startCoordinate)
     print(f"Part 1: {len(UsedSplitterSet)}")
+
+    # Part 2 - recursive loop for ALL paths from incoming beam source 'S'
+    pathCount = findPathCount(startCoordinate, 0)
+    print(f"Part 2: {pathCount}")
 
 
 def findSplits(coordinate):
 
-    if coordinate in findSplits_cache or shr.validCoordinate(coordinate, MaxWidth, MaxHeight) == False:
-        # Cached value or Bottom/Side Reached - return
+    if coordinate in FindSplits_cache or shr.validCoordinate(coordinate, MaxWidth, MaxHeight) == False:
+        # Cached value or Bottom Reached - return
         return
     elif FileGrid[coordinate] == "^":
         # Splitter Found!  Add to set and continue with split beam
@@ -49,12 +54,42 @@ def findSplits(coordinate):
         findSplits(leftCoordinate)
         findSplits(rightCoordinate)
     elif FileGrid[coordinate] == "." or FileGrid[coordinate] == "S":
-        # Empty Space - continue moving downward
+        # Start or Empty Space - continue moving downward
         downCoordinate = shr.moveCoordinate(coordinate, "v")
         findSplits(downCoordinate)
     else:
         raise Exception(f"Invalid Value at coordinate {coordinate}: {FileGrid[coordinate]}")
 
-    findSplits_cache.add(coordinate)
+    FindSplits_cache.add(coordinate)
+
+
+def findPathCount(coordinate, pathsFromStart):
+
+    # Number of paths to the end from the current coordinate
+    # This value starts as the number of paths TO the current coordinate from the start 
+    pathsFromCurrent = pathsFromStart
+
+    if coordinate in FindPaths_cache:
+        # PathsFromCurrent has already been calculated - Return value from Cache
+        return FindPaths_cache[coordinate]
+    elif shr.validCoordinate(coordinate, MaxWidth, MaxHeight) == False:
+        # Bottom Reached - add 1 path
+        pathsFromCurrent += 1
+    elif FileGrid[coordinate] == "^":
+        # Splitter Found!  Add paths from right and left coordinate
+        leftCoordinate = shr.moveCoordinate(coordinate, "<")
+        rightCoordinate = shr.moveCoordinate(coordinate, ">")
+        pathsFromCurrent += findPathCount(leftCoordinate, pathsFromStart)
+        pathsFromCurrent += findPathCount(rightCoordinate, pathsFromStart)
+    elif FileGrid[coordinate] == "." or FileGrid[coordinate] == "S":
+        # Start or Empty Space - add paths from down coordinate
+        downCoordinate = shr.moveCoordinate(coordinate, "v")
+        pathsFromCurrent += findPathCount(downCoordinate, pathsFromStart)
+    else:
+        raise Exception(f"Invalid Value at coordinate {coordinate}: {FileGrid[coordinate]}")
+    
+    # Save calculated pathsFromCurrent coordinate into cache and return
+    FindPaths_cache[coordinate] = pathsFromCurrent
+    return pathsFromCurrent
 
 main()
