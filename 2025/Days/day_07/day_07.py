@@ -18,6 +18,7 @@ FileGrid = {}
 MaxWidth = 0
 MaxHeight = 0
 UsedSplitterSet = set()
+findSplits_cache = set()
 
 def main():
     global FileGrid, MaxWidth, MaxHeight # Modifying Value of Global Variables
@@ -35,13 +36,10 @@ def main():
     print(f"Part 1: {len(UsedSplitterSet)}")
 
 
-
-
-
 def findSplits(coordinate):
 
-    if shr.validCoordinate(coordinate, MaxWidth, MaxHeight) == False:
-        # Bottom/Side Reached - return
+    if coordinate in findSplits_cache or shr.validCoordinate(coordinate, MaxWidth, MaxHeight) == False:
+        # Cached value or Bottom/Side Reached - return
         return
     elif FileGrid[coordinate] == "^":
         # Splitter Found!  Add to set and continue with split beam
@@ -57,5 +55,6 @@ def findSplits(coordinate):
     else:
         raise Exception(f"Invalid Value at coordinate {coordinate}: {FileGrid[coordinate]}")
 
+    findSplits_cache.add(coordinate)
 
 main()
