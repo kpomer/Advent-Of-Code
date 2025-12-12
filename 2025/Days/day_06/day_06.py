@@ -17,7 +17,18 @@ Current_Dir = os.path.dirname(__file__) #directory of current folder
 
 
 def main():
-    fileSA = shr.fileAsStringArray(Current_Dir)
+
+    fileSA = shr.fileAsStringArray(Current_Dir) # Set "e" for Example
+    fileGrid, fileWidth, fileHeight = shr.fileAsGrid(Current_Dir) # Set "e" for Example
+
+    part1_result = part1(fileSA)
+    part2_result = part2(fileGrid, fileWidth, fileHeight)
+
+    print(f"Part 1: {part1_result}")
+    print(f"Part 2: {part2_result}")
+
+
+def part1(fileSA):
     
     mathProblems = [] # [num1, num2, ..., numN, symbol]
     problemElements = len(fileSA) - 1
@@ -46,7 +57,47 @@ def main():
             problem.pop(problemElements)   
             part1_sum += math.prod(problem)
 
-    print(f"Part 1: {part1_sum}")
+    return part1_sum
 
+
+def part2(fileGrid, fileWidth, fileHeight):
+
+    mathProblems = [] # [num1, num2, ..., numN, symbol]
+
+    w = fileWidth - 1  
+    problem = []  
+    while w >= 0:
+        h = 0
+        val = ""
+        while h < fileHeight:
+            if fileGrid[w,h] != " ":
+                val += fileGrid[w,h]
+            h += 1
+        if val.isnumeric():
+            problem.append(int(val))
+            w -= 1
+        elif val[:-1].isnumeric():
+            problem.append(int(val[:-1]))
+            problem.append(val[-1:])
+            mathProblems.append(problem)
+            problem = []
+            w -= 2
+        else:
+            raise Exception(f"Invalid Value at [{w},{h}]")
+
+
+    part2_sum = 0
+    for problem in mathProblems:
+        if problem[len(problem)-1] == "+": 
+            problem.pop(len(problem)-1)   
+            part2_sum += sum(problem)
+        elif problem[len(problem)-1] == "*": 
+            problem.pop(len(problem)-1)   
+            part2_sum += math.prod(problem)
+        else:
+            raise Exception(f"Invalid Problem: {problem}")
+
+    return part2_sum
+    
 
 main()
