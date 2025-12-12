@@ -23,6 +23,7 @@ def fileAsStringArray(rootDirectory, file = "i"):
     return f.readlines()
 
 def fileAsGrid(rootDirectory, file = "i"):
+    """Returns dict grid, int width, int height"""
     grid = {}
     fileSA = fileAsStringArray(rootDirectory, file)
 
